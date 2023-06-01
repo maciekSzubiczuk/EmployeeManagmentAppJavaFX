@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="331.0" prefWidth="730.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.employeemanagmentappjavafx.controllers.ListEmployeesController">
+   <children>
+      <TableView fx:id="tvEmployees" layoutX="14.0" layoutY="14.0" prefHeight="295.0" prefWidth="443.0">
+        <columns>
+          <TableColumn fx:id="colId" prefWidth="41.999999046325684" text="ID" />
+          <TableColumn fx:id="colFirstName" prefWidth="88.00000381469727" text="Imię" />
+            <TableColumn fx:id="colLastName" prefWidth="94.0" text="Nazwisko" />
+            <TableColumn fx:id="colSalary" prefWidth="122.66667175292969" text="Wynagrodzenie" />
+            <TableColumn fx:id="colVacationEnd" prefWidth="92.66668701171875" text="Urlop do:" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
