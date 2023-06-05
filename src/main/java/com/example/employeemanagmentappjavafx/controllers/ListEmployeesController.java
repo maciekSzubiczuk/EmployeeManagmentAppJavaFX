@@ -14,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -56,6 +57,9 @@ public class ListEmployeesController implements Initializable {
     @FXML
     private TableColumn<Employee, LocalDate> colVacationEnd;
 
+    @FXML
+    private ProgressIndicator piListEmployeesLoading;
+
     private static final Logger logger = LogManager.getLogger(ListEmployeesController.class);
 
     private DatabaseConnector databaseConnector = new DatabaseConnector();
@@ -88,11 +92,13 @@ public class ListEmployeesController implements Initializable {
 
     public void showEmployees() {
 
+        piListEmployeesLoading.setProgress(-1);
         ObservableList<Employee> employeeList = employeeDAO.getEmployeeList();
         Task<ObservableList<Employee>> employeeListTask = new Task<ObservableList<Employee>>() {
             @Override
             public ObservableList<Employee> call() throws Exception {
                 logger.info("running thread: "+Thread.currentThread().getName());
+                Thread.sleep(5000);
                 return employeeDAO.getEmployeeList();
             }
         };
@@ -112,7 +118,8 @@ public class ListEmployeesController implements Initializable {
 
             tvEmployees.setItems(employeeList);
 
-            // run the task using a thread from the thread pool:
+            // Stopping the spinning animation
+            piListEmployeesLoading.setProgress(1);
         });
         exec.execute(employeeListTask);
 
