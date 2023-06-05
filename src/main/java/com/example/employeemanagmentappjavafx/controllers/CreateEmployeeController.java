@@ -6,6 +6,8 @@ import com.example.employeemanagmentappjavafx.ViewSwitcher;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,16 +35,10 @@ public class CreateEmployeeController {
     @FXML
     private TextField tfVacation;
 
+    private static final Logger logger = LogManager.getLogger(CreateEmployeeController.class);
+
     @FXML
     protected void onCreateBtnClick() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date vacationEnd = null;
-        try {
-            vacationEnd = sdf.parse(tfVacation.getText());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
         insertEmployee(new Employee(tfFirstName.getText(),
         tfLastName.getText(),Float.parseFloat(tfSalary.getText()),tfVacation.getText()));
         ViewSwitcher.switchTo(View.LIST_EMPLOYEES);
@@ -50,6 +46,7 @@ public class CreateEmployeeController {
 
     @FXML
     protected void onShowEmployeeListBtnClick() {
+        logger.info("running thread: "+Thread.currentThread().getName());
         ViewSwitcher.switchTo(View.LIST_EMPLOYEES);
     }
 

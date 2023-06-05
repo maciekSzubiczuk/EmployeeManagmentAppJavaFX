@@ -7,6 +7,7 @@ import com.example.employeemanagmentappjavafx.database.DatabaseConnector;
 import com.example.employeemanagmentappjavafx.models.Employee;
 import com.example.employeemanagmentappjavafx.dao.EmployeeDAO;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -30,6 +31,9 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class ListEmployeesController implements Initializable {
@@ -58,6 +62,8 @@ public class ListEmployeesController implements Initializable {
 
     private EmployeeDAO employeeDAO = new EmployeeDAO(databaseConnector);
 
+    private Executor exec;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         tvEmployees.setRowFactory(tv -> {
@@ -66,26 +72,51 @@ public class ListEmployeesController implements Initializable {
                 if (! row.isEmpty() && event.getButton()==MouseButton.PRIMARY
                         && event.getClickCount() == 2) {
                     Employee clickedEmployee = row.getItem();
-                    logger.info(clickedEmployee.getFirstName());
                     DataManager.getInstance().setSelectedEmployee(clickedEmployee);
                     ViewSwitcher.switchTo(View.EDIT_EMPLOYEE);
                 }
             });
             return row ;
         });
+        exec = Executors.newCachedThreadPool(runnable -> {
+            Thread t = new Thread(runnable);
+            t.setDaemon(true);
+            return t ;
+        });
         showEmployees();
     }
 
     public void showEmployees() {
+
         ObservableList<Employee> employeeList = employeeDAO.getEmployeeList();
+        Task<ObservableList<Employee>> employeeListTask = new Task<ObservableList<Employee>>() {
+            @Override
+            public ObservableList<Employee> call() throws Exception {
+                logger.info("running thread: "+Thread.currentThread().getName());
+                return employeeDAO.getEmployeeList();
+            }
+        };
 
-        colId.setCellValueFactory(new PropertyValueFactory<Employee, Integer>("id"));
-        colFirstName.setCellValueFactory(new PropertyValueFactory<Employee, String>("firstName"));
-        colLastName.setCellValueFactory(new PropertyValueFactory<Employee, String>("lastName"));
-        colSalary.setCellValueFactory(new PropertyValueFactory<Employee, Float>("salary"));
-        colVacationEnd.setCellValueFactory(new PropertyValueFactory<Employee, LocalDate>("vacationEnd"));
+        employeeListTask.setOnFailed(e -> {
+            employeeListTask.getException().printStackTrace();
+            // inform user of error...
+        });
 
-        tvEmployees.setItems(employeeList);
+        employeeListTask.setOnSucceeded(e -> {
+            // Task.getValue() gives the value returned from call()...
+            colId.setCellValueFactory(new PropertyValueFactory<Employee, Integer>("id"));
+            colFirstName.setCellValueFactory(new PropertyValueFactory<Employee, String>("firstName"));
+            colLastName.setCellValueFactory(new PropertyValueFactory<Employee, String>("lastName"));
+            colSalary.setCellValueFactory(new PropertyValueFactory<Employee, Float>("salary"));
+            colVacationEnd.setCellValueFactory(new PropertyValueFactory<Employee, LocalDate>("vacationEnd"));
+
+            tvEmployees.setItems(employeeList);
+
+            // run the task using a thread from the thread pool:
+        });
+        exec.execute(employeeListTask);
+
+
     }
 
 }
