@@ -1,7 +1,7 @@
 package com.example.employeemanagmentappjavafx.models;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.io.File;
+import java.io.InputStream;
 
 public class Employee {
 
@@ -10,6 +10,16 @@ public class Employee {
     private String lastName;
     private float salary;
     private String vacationEnd;
+    private InputStream photo;
+
+    public Employee(int id, String firstName, String lastName, float salary, String vacationEnd, InputStream photo) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.salary = salary;
+        this.vacationEnd = vacationEnd;
+        this.photo = photo;
+    }
 
     public Employee(int id, String firstName, String lastName, float salary, String vacationEnd) {
         this.id = id;
@@ -17,12 +27,19 @@ public class Employee {
         this.lastName = lastName;
         this.salary = salary;
         this.vacationEnd = vacationEnd;
+        this.photo = null;
     }
+
     public Employee(String firstName, String lastName, float salary, String vacationEnd) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.salary = salary;
         this.vacationEnd = vacationEnd;
+        this.photo = null;
+    }
+
+    public Employee() {
+
     }
 
     public int getId() {
@@ -63,5 +80,13 @@ public class Employee {
 
     public void setVacationEnd(String vacationEnd) {
         this.vacationEnd = vacationEnd;
+    }
+
+    public InputStream getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(InputStream photo) {
+        this.photo = photo;
     }
 }

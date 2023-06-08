@@ -11,6 +11,7 @@ module com.example.employeemanagmentappjavafx {
     requires eu.hansolo.tilesfx;
     requires org.apache.logging.log4j;
     requires java.sql;
+    requires java.desktop;
 
     opens com.example.employeemanagmentappjavafx to javafx.fxml;
     exports com.example.employeemanagmentappjavafx;

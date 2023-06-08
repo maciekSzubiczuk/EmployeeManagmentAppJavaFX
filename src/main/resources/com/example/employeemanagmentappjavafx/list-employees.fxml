@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="331.0" prefWidth="645.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.employeemanagmentappjavafx.controllers.ListEmployeesController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="340.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.employeemanagmentappjavafx.controllers.ListEmployeesController">
    <children>
       <TableView fx:id="tvEmployees" layoutX="14.0" layoutY="14.0" prefHeight="295.0" prefWidth="443.0">
         <columns>
@@ -18,6 +18,6 @@
         </columns>
       </TableView>
       <ProgressIndicator fx:id="piListEmployeesLoading" layoutX="473.0" layoutY="269.0" progress="0.0" />
-      <Button fx:id="btnAddNewEmployee" layoutX="473.0" layoutY="224.0" mnemonicParsing="false" text="Dodaj nowego pracownika" />
+      <Button fx:id="btnAddNewEmployee" layoutX="473.0" layoutY="225.0" mnemonicParsing="false" onAction="#onBtnAddNewEmployee" text="Dodaj nowego pracownika" />
    </children>
 </AnchorPane>

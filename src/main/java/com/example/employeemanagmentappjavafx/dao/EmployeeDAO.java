@@ -7,8 +7,9 @@ import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.example.employeemanagmentappjavafx.database.DatabaseConnector.executeUpdate;
@@ -19,6 +20,8 @@ public class EmployeeDAO {
     private static final Logger logger = LogManager.getLogger(EmployeeDAO.class);
 
     private DatabaseConnector databaseConnector;
+
+    private static FileInputStream fileInputStream;
 
     public EmployeeDAO(DatabaseConnector databaseConnector) {
         this.databaseConnector = databaseConnector;
@@ -48,12 +51,50 @@ public class EmployeeDAO {
         return employeeList;
     }
 
-    public static void insertEmployee(Employee employee){
-        String query = "INSERT INTO employee (`first_name`, `last_name`, `salary`, `vacation_end`) " +
-                "VALUES ('"+employee.getFirstName()+
-                "','"+employee.getLastName()+"','"+employee.getSalary()+"','"+employee.getVacationEnd()+"');";
+    public static Employee getEmployee(int id) {
+        Connection connection = getConnection();
+        String query = "SELECT * FROM employee WHERE id = ?";
+        Employee employee = new Employee();
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1,id);
+            ResultSet rs = statement.executeQuery();
+            if(rs.next()){
+                employee.setId(rs.getInt("id"));
+                employee.setFirstName(rs.getString("first_name"));
+                employee.setLastName(rs.getString("last_name"));
+                employee.setSalary(rs.getFloat("salary"));
+                employee.setVacationEnd(rs.getString("vacation_end"));
+                employee.setPhoto(rs.getBinaryStream("photo"));
+            }
+            statement.close();
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return employee;
+    }
+
+    public static void insertEmployee(Employee employee) {
+        String query = "INSERT INTO employee (`first_name`, `last_name`, `salary`, `vacation_end`,`photo`)  " +
+                " VALUES (?, ?, ?, ?, ?)";
         logger.info(query);
-        executeUpdate(query);
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = Objects.requireNonNull(getConnection()).prepareStatement(query);
+            preparedStatement.setString(1,employee.getFirstName());
+            preparedStatement.setString(2,employee.getLastName());
+            preparedStatement.setFloat(3,employee.getSalary());
+            preparedStatement.setString(4,employee.getVacationEnd());
+            preparedStatement.setBinaryStream(5,null);
+            if(employee.getPhoto()!=null){
+                preparedStatement.setBinaryStream(5,employee.getPhoto());
+            }
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void updateEmployee(Employee newEmployeeData,int idToUpdate){

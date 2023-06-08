@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="331.0" prefWidth="730.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.employeemanagmentappjavafx.controllers.ListEmployeesController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="340.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.employeemanagmentappjavafx.controllers.ListEmployeesController">
    <children>
       <TableView fx:id="tvEmployees" layoutX="14.0" layoutY="14.0" prefHeight="295.0" prefWidth="443.0">
         <columns>
@@ -15,5 +17,7 @@
             <TableColumn fx:id="colVacationEnd" prefWidth="92.66668701171875" text="Urlop do:" />
         </columns>
       </TableView>
+      <ProgressIndicator fx:id="piListEmployeesLoading" layoutX="473.0" layoutY="269.0" progress="0.0" />
+      <Button fx:id="btnAddNewEmployee" layoutX="473.0" layoutY="225.0" mnemonicParsing="false" onAction="#onBtnAddNewEmployee" text="Dodaj nowego pracownika" />
    </children>
 </AnchorPane>

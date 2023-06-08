@@ -14,10 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -35,6 +32,8 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static com.example.employeemanagmentappjavafx.dao.EmployeeDAO.getEmployee;
 
 
 public class ListEmployeesController implements Initializable {
@@ -58,6 +57,9 @@ public class ListEmployeesController implements Initializable {
     private TableColumn<Employee, LocalDate> colVacationEnd;
 
     @FXML
+    private Button btnAddNewEmployee;
+
+    @FXML
     private ProgressIndicator piListEmployeesLoading;
 
     private static final Logger logger = LogManager.getLogger(ListEmployeesController.class);
@@ -76,7 +78,8 @@ public class ListEmployeesController implements Initializable {
                 if (! row.isEmpty() && event.getButton()==MouseButton.PRIMARY
                         && event.getClickCount() == 2) {
                     Employee clickedEmployee = row.getItem();
-                    DataManager.getInstance().setSelectedEmployee(clickedEmployee);
+                    DataManager.getInstance().setSelectedEmployee(getEmployee(clickedEmployee.getId()));
+                    logger.info("photo: "+clickedEmployee.getPhoto());
                     ViewSwitcher.switchTo(View.EDIT_EMPLOYEE);
                 }
             });
@@ -98,7 +101,7 @@ public class ListEmployeesController implements Initializable {
             @Override
             public ObservableList<Employee> call() throws Exception {
                 logger.info("running thread: "+Thread.currentThread().getName());
-                Thread.sleep(5000);
+                //Thread.sleep(5000);
                 return employeeDAO.getEmployeeList();
             }
         };
@@ -115,15 +118,16 @@ public class ListEmployeesController implements Initializable {
             colLastName.setCellValueFactory(new PropertyValueFactory<Employee, String>("lastName"));
             colSalary.setCellValueFactory(new PropertyValueFactory<Employee, Float>("salary"));
             colVacationEnd.setCellValueFactory(new PropertyValueFactory<Employee, LocalDate>("vacationEnd"));
-
             tvEmployees.setItems(employeeList);
-
             // Stopping the spinning animation
             piListEmployeesLoading.setProgress(1);
         });
         exec.execute(employeeListTask);
+    }
 
-
+    @FXML
+    protected void onBtnAddNewEmployee(){
+        ViewSwitcher.switchTo(View.CREATE_EMPLOYEE);
     }
 
 }

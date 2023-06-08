@@ -5,6 +5,7 @@ import com.example.employeemanagmentappjavafx.models.Employee;
 public class DataManager {
     private static DataManager instance;
     private Employee selectedEmployee;
+    private int selectedEmployeeId;
 
     private DataManager() {
         // private constructor to enforce singleton pattern
@@ -23,5 +24,13 @@ public class DataManager {
 
     public void setSelectedEmployee(Employee selectedEmployee) {
         this.selectedEmployee = selectedEmployee;
+    }
+
+    public int getSelectedEmployeeId() {
+        return selectedEmployeeId;
+    }
+
+    public void setSelectedEmployeeId(int selectedEmployeeId) {
+        this.selectedEmployeeId = selectedEmployeeId;
     }
 }
