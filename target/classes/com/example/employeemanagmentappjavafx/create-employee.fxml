@@ -44,7 +44,7 @@
       </VBox>
       <Button fx:id="btnAddEmployee" layoutX="51.0" layoutY="275.0" mnemonicParsing="false" onAction="#onCreateBtnClick" text="Dodaj Pracownika" />
       <Button fx:id="showEmployeeListBtn" layoutX="231.0" layoutY="275.0" mnemonicParsing="false" onAction="#onShowEmployeeListBtnClick" text="Pokaż listę pracowników" />
-      <Button fx:id="browseBtn" layoutX="410.0" layoutY="275.0" mnemonicParsing="false" onAction="#onBrowseBtn" text="Przeglądaj pliki" />
+      <Button fx:id="btnAddPhoto" layoutX="410.0" layoutY="275.0" mnemonicParsing="false" onAction="#onBtnAddPhoto" text="Dodaj zdjęcie" />
       <ImageView fx:id="ivEmployeePhoto" fitHeight="150.0" fitWidth="200.0" layoutX="378.0" layoutY="48.0" pickOnBounds="true" />
    </children>
 </AnchorPane>

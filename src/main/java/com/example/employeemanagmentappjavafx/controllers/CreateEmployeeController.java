@@ -43,7 +43,7 @@ public class CreateEmployeeController {
     private TextField tfVacation;
 
     @FXML
-    private Button browseBtn;
+    private Button btnAddPhoto;
 
     @FXML
     private ImageView ivEmployeePhoto;
@@ -56,12 +56,12 @@ public class CreateEmployeeController {
     private FileInputStream fileInputStream;
 
     @FXML
-    protected void onBrowseBtn(){
+    protected void onBtnAddPhoto(){
         fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files","*.png","*.jpg")
         );
-        file = fileChooser.showOpenDialog(browseBtn.getScene().getWindow());
+        file = fileChooser.showOpenDialog(btnAddPhoto.getScene().getWindow());
         if(file!=null){
             try {
                 desktop.open(file);

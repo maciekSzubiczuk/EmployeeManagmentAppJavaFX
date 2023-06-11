@@ -42,8 +42,10 @@
             <TextField fx:id="tfVacation" />
          </children>
       </VBox>
-      <Button fx:id="btnEditEmployee" layoutX="51.0" layoutY="275.0" mnemonicParsing="false" onAction="#onBtnEditEmployeeClick" text="Zapisz zmiany" />
-      <Button fx:id="cancelBtn" layoutX="207.0" layoutY="275.0" mnemonicParsing="false" onAction="#onCancelBtnClick" text="Anuluj" />
-      <ImageView fx:id="ivEmployeePhoto" fitHeight="150.0" fitWidth="200.0" layoutX="379.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true" />
+      <Button fx:id="btnEditEmployee" layoutX="51.0" layoutY="275.0" mnemonicParsing="false" onAction="#onBtnEditEmployee" text="Zapisz zmiany" />
+      <Button fx:id="cancelBtn" layoutX="188.0" layoutY="275.0" mnemonicParsing="false" onAction="#onCancelBtnClick" text="Anuluj" />
+      <ImageView fx:id="ivEmployeePhoto" fitHeight="150.0" fitWidth="200.0" layoutX="379.0" layoutY="39.0" pickOnBounds="true" />
+      <Button fx:id="btnChangePhoto" layoutX="434.0" layoutY="275.0" mnemonicParsing="false" onAction="#onBtnChangePhoto" text="Zmień zdjęcie" />
+      <Button fx:id="btnDeleteEmployee" layoutX="289.0" layoutY="275.0" mnemonicParsing="false" text="Usuń Pracownika" textFill="#fb0707" />
    </children>
 </AnchorPane>

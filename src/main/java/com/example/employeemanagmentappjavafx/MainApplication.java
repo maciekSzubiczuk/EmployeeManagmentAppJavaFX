@@ -13,7 +13,8 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        var scene = new Scene(new Pane());
+        var root = new Pane();
+        var scene = new Scene(root, 700, 400);
         ViewSwitcher.setScene(scene);
         ViewSwitcher.switchTo(View.CREATE_EMPLOYEE);
         stage.setScene(scene);

@@ -78,17 +78,28 @@ public class EmployeeDAO {
     public static void insertEmployee(Employee employee) {
         String query = "INSERT INTO employee (`first_name`, `last_name`, `salary`, `vacation_end`,`photo`)  " +
                 " VALUES (?, ?, ?, ?, ?)";
+        executeEmployeeQuery(employee,query);
+    }
+
+    public static void updateEmployee(Employee newEmployeeData) {
+        String query = "UPDATE employee SET first_name = ?, last_name = ?, salary = ?," +
+                " vacation_end = ?, photo = ?  " +
+                " WHERE id = "+newEmployeeData.getId();
         logger.info(query);
+        executeEmployeeQuery(newEmployeeData,query);
+    }
+
+    public static void executeEmployeeQuery(Employee employeeData,String query) {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = Objects.requireNonNull(getConnection()).prepareStatement(query);
-            preparedStatement.setString(1,employee.getFirstName());
-            preparedStatement.setString(2,employee.getLastName());
-            preparedStatement.setFloat(3,employee.getSalary());
-            preparedStatement.setString(4,employee.getVacationEnd());
+            preparedStatement.setString(1,employeeData.getFirstName());
+            preparedStatement.setString(2,employeeData.getLastName());
+            preparedStatement.setFloat(3,employeeData.getSalary());
+            preparedStatement.setString(4,employeeData.getVacationEnd());
             preparedStatement.setBinaryStream(5,null);
-            if(employee.getPhoto()!=null){
-                preparedStatement.setBinaryStream(5,employee.getPhoto());
+            if(employeeData.getPhoto()!=null){
+                preparedStatement.setBinaryStream(5,employeeData.getPhoto());
             }
             preparedStatement.executeUpdate();
             preparedStatement.close();
@@ -97,11 +108,14 @@ public class EmployeeDAO {
         }
     }
 
+    /*
     public static void updateEmployee(Employee newEmployeeData,int idToUpdate){
         String query = "UPDATE employee SET first_name = '"+newEmployeeData.getFirstName()+"', last_name= '"+newEmployeeData.getLastName()
                 +"', salary = '"+newEmployeeData.getSalary()+"' , vacation_end = '"+newEmployeeData.getVacationEnd()
                 +"' WHERE id = "+idToUpdate+";";
         executeUpdate(query);
     }
+
+     */
 }
 

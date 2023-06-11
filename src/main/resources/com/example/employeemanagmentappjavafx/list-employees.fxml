@@ -17,7 +17,7 @@
             <TableColumn fx:id="colVacationEnd" prefWidth="92.66668701171875" text="Urlop do:" />
         </columns>
       </TableView>
-      <ProgressIndicator fx:id="piListEmployeesLoading" layoutX="473.0" layoutY="269.0" progress="0.0" />
-      <Button fx:id="btnAddNewEmployee" layoutX="473.0" layoutY="225.0" mnemonicParsing="false" onAction="#onBtnAddNewEmployee" text="Dodaj nowego pracownika" />
+      <ProgressIndicator fx:id="piListEmployeesLoading" layoutX="487.0" layoutY="268.0" progress="0.0" />
+      <Button fx:id="btnAddNewEmployee" layoutX="500.0" layoutY="209.0" mnemonicParsing="false" onAction="#onBtnAddNewEmployee" text="Dodaj nowego pracownika" />
    </children>
 </AnchorPane>
