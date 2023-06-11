@@ -46,6 +46,6 @@
       <Button fx:id="cancelBtn" layoutX="188.0" layoutY="275.0" mnemonicParsing="false" onAction="#onCancelBtnClick" text="Anuluj" />
       <ImageView fx:id="ivEmployeePhoto" fitHeight="150.0" fitWidth="200.0" layoutX="379.0" layoutY="39.0" pickOnBounds="true" />
       <Button fx:id="btnChangePhoto" layoutX="434.0" layoutY="275.0" mnemonicParsing="false" onAction="#onBtnChangePhoto" text="Zmień zdjęcie" />
-      <Button fx:id="btnDeleteEmployee" layoutX="289.0" layoutY="275.0" mnemonicParsing="false" text="Usuń Pracownika" textFill="#fb0707" />
+      <Button fx:id="btnDeleteEmployee" layoutX="289.0" layoutY="275.0" mnemonicParsing="false" onAction="#onBtnDeleteEmployee" text="Usuń Pracownika" textFill="#fb0707" />
    </children>
 </AnchorPane>

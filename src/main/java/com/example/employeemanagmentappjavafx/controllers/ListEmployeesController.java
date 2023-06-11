@@ -79,7 +79,6 @@ public class ListEmployeesController implements Initializable {
                         && event.getClickCount() == 2) {
                     Employee clickedEmployee = row.getItem();
                     DataManager.getInstance().setSelectedEmployee(getEmployee(clickedEmployee.getId()));
-                    logger.info("photo: "+clickedEmployee.getPhoto());
                     ViewSwitcher.switchTo(View.EDIT_EMPLOYEE);
                 }
             });

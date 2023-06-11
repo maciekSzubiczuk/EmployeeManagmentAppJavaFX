@@ -8,11 +8,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.sql.*;
 import java.util.Objects;
 
-import static com.example.employeemanagmentappjavafx.database.DatabaseConnector.executeUpdate;
 import static com.example.employeemanagmentappjavafx.database.DatabaseConnector.getConnection;
 
 public class EmployeeDAO {
@@ -78,7 +76,7 @@ public class EmployeeDAO {
     public static void insertEmployee(Employee employee) {
         String query = "INSERT INTO employee (`first_name`, `last_name`, `salary`, `vacation_end`,`photo`)  " +
                 " VALUES (?, ?, ?, ?, ?)";
-        executeEmployeeQuery(employee,query);
+        executeInsertUpdatedEmployeeQuery(employee,query);
     }
 
     public static void updateEmployee(Employee newEmployeeData) {
@@ -86,10 +84,26 @@ public class EmployeeDAO {
                 " vacation_end = ?, photo = ?  " +
                 " WHERE id = "+newEmployeeData.getId();
         logger.info(query);
-        executeEmployeeQuery(newEmployeeData,query);
+        executeInsertUpdatedEmployeeQuery(newEmployeeData,query);
     }
 
-    public static void executeEmployeeQuery(Employee employeeData,String query) {
+    public static void deleteEmployee(int employeeId) {
+        String sql = "DELETE FROM employee WHERE id = ?";
+        try (Connection connection = getConnection()) {
+            assert connection != null;
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, employeeId);
+                int rowsDeleted = statement.executeUpdate();
+                if (rowsDeleted == 0) {
+                    throw new SQLException("No employee with ID " + employeeId + " found.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void executeInsertUpdatedEmployeeQuery(Employee employeeData, String query) {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = Objects.requireNonNull(getConnection()).prepareStatement(query);

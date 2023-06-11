@@ -18,6 +18,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static com.example.employeemanagmentappjavafx.dao.EmployeeDAO.deleteEmployee;
 import static com.example.employeemanagmentappjavafx.dao.EmployeeDAO.updateEmployee;
 
 public class EditEmployeeController implements Initializable {
@@ -46,6 +47,9 @@ public class EditEmployeeController implements Initializable {
     @FXML
     private Button btnChangePhoto;
 
+    @FXML
+    private Button btnDeleteEmployee;
+
     private DatabaseConnector databaseConnector = new DatabaseConnector();
     private FileChooser fileChooser;
     private File file = null;
@@ -70,33 +74,36 @@ public class EditEmployeeController implements Initializable {
         tfSalary.setText(String.valueOf(employee.getSalary()));
         tfVacation.setText(String.valueOf(employee.getVacationEnd()));
 
-        // displaying the Image
-        InputStream is = employee.getPhoto();
-        OutputStream os = null;
-        try {
-            os = new FileOutputStream(new File("photo.jpg"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        byte[] content = new byte[1024];
-        int size = 0;
-        while ((size = is.read(content)) != -1){
+        if (employee.getPhoto() != null) {
+
+            // displaying the Image
+            InputStream is = employee.getPhoto();
+            OutputStream os = null;
+            try {
+                os = new FileOutputStream(new File("photo.jpg"));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            byte[] content = new byte[1024];
+            int size = 0;
+            while ((size = is.read(content)) != -1) {
+                assert os != null;
+                os.write(content, 0, size);
+            }
             assert os != null;
-            os.write(content,0,size);
+            os.close();
+            is.close();
+            Image image = new Image("file:photo.jpg");
+            ivEmployeePhoto.setImage(image);
         }
-        assert os != null;
-        os.close();
-        is.close();
-        Image image = new Image("file:photo.jpg");
-        ivEmployeePhoto.setImage(image);
     }
 
     @FXML
-    protected void onBtnEditEmployee(){
+    protected void onBtnEditEmployee() {
         Employee selectedEmployee = DataManager.getInstance().getSelectedEmployee();
-        Employee newEmployeeData = new Employee(selectedEmployee.getId(),tfFirstName.getText(),tfLastName.getText(),
-                Float.parseFloat(tfSalary.getText()),tfVacation.getText());
-        if(file!=null){
+        Employee newEmployeeData = new Employee(selectedEmployee.getId(), tfFirstName.getText(), tfLastName.getText(),
+                Float.parseFloat(tfSalary.getText()), tfVacation.getText());
+        if (file != null) {
             try {
                 newEmployeeData.setPhoto(new FileInputStream(file));
             } catch (FileNotFoundException e) {
@@ -108,13 +115,13 @@ public class EditEmployeeController implements Initializable {
     }
 
     @FXML
-    protected void onBtnChangePhoto(){
+    protected void onBtnChangePhoto() {
         fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files","*.png","*.jpg")
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg")
         );
         file = fileChooser.showOpenDialog(btnChangePhoto.getScene().getWindow());
-        if(file!=null){
+        if (file != null) {
             try {
                 desktop.open(file);
                 image = new Image(file.toURI().toString());
@@ -126,7 +133,13 @@ public class EditEmployeeController implements Initializable {
     }
 
     @FXML
-    protected void onCancelBtnClick(){
+    protected void onCancelBtnClick() {
+        ViewSwitcher.switchTo(View.LIST_EMPLOYEES);
+    }
+
+    @FXML
+    protected void onBtnDeleteEmployee() {
+        deleteEmployee(DataManager.getInstance().getSelectedEmployee().getId());
         ViewSwitcher.switchTo(View.LIST_EMPLOYEES);
     }
 }
