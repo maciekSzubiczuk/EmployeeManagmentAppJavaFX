@@ -20,7 +20,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executor;
@@ -53,7 +52,6 @@ public class CreateEmployeeController implements Initializable {
     private File file;
     private final Desktop desktop = Desktop.getDesktop();
     private static ResourceBundle bundle = ResourceBundle.getBundle("application");
-
     private static final int MAX_LENGTH = 10;
 
     @Override
@@ -66,18 +64,14 @@ public class CreateEmployeeController implements Initializable {
     @FXML
     protected void onBtnAddPhoto() {
         FileChooser fileChooser = new FileChooser();
+        Image image;
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg")
         );
         file = fileChooser.showOpenDialog(btnAddPhoto.getScene().getWindow());
         if (file != null) {
-            try {
-                desktop.open(file);
-                Image image = new Image(file.toURI().toString());
-                ivEmployeePhoto.setImage(image);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            image = new Image(file.toURI().toString());
+            ivEmployeePhoto.setImage(image);
         }
 
     }

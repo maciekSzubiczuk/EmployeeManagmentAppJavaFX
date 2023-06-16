@@ -115,13 +115,8 @@ public class EditEmployeeController implements Initializable {
         );
         file = fileChooser.showOpenDialog(btnChangePhoto.getScene().getWindow());
         if (file != null) {
-            try {
-                desktop.open(file);
-                Image image = new Image(file.toURI().toString());
-                ivEmployeePhoto.setImage(image);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Image image = new Image(file.toURI().toString());
+            ivEmployeePhoto.setImage(image);
         }
     }
 
