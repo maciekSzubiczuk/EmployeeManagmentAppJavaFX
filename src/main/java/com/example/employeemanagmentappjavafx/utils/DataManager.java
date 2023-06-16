@@ -8,7 +8,7 @@ public class DataManager {
     private int selectedEmployeeId;
 
     private DataManager() {
-        // private constructor to enforce singleton pattern
+
     }
 
     public static DataManager getInstance() {

@@ -54,10 +54,11 @@ public class EmployeeDAO {
         String query = "SELECT * FROM employee WHERE id = ?";
         Employee employee = new Employee();
         try {
+            assert connection != null;
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1,id);
+            statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 employee.setId(rs.getInt("id"));
                 employee.setFirstName(rs.getString("first_name"));
                 employee.setLastName(rs.getString("last_name"));
@@ -76,15 +77,15 @@ public class EmployeeDAO {
     public static void insertEmployee(Employee employee) {
         String query = "INSERT INTO employee (`first_name`, `last_name`, `salary`, `vacation_end`,`photo`)  " +
                 " VALUES (?, ?, ?, ?, ?)";
-        executeInsertUpdatedEmployeeQuery(employee,query);
+        executeInsertUpdatedEmployeeQuery(employee, query);
     }
 
     public static void updateEmployee(Employee newEmployeeData) {
         String query = "UPDATE employee SET first_name = ?, last_name = ?, salary = ?," +
                 " vacation_end = ?, photo = ?  " +
-                " WHERE id = "+newEmployeeData.getId();
+                " WHERE id = " + newEmployeeData.getId();
         logger.info(query);
-        executeInsertUpdatedEmployeeQuery(newEmployeeData,query);
+        executeInsertUpdatedEmployeeQuery(newEmployeeData, query);
     }
 
     public static void deleteEmployee(int employeeId) {
@@ -107,13 +108,13 @@ public class EmployeeDAO {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = Objects.requireNonNull(getConnection()).prepareStatement(query);
-            preparedStatement.setString(1,employeeData.getFirstName());
-            preparedStatement.setString(2,employeeData.getLastName());
-            preparedStatement.setFloat(3,employeeData.getSalary());
-            preparedStatement.setString(4,employeeData.getVacationEnd());
-            preparedStatement.setBinaryStream(5,null);
-            if(employeeData.getPhoto()!=null){
-                preparedStatement.setBinaryStream(5,employeeData.getPhoto());
+            preparedStatement.setString(1, employeeData.getFirstName());
+            preparedStatement.setString(2, employeeData.getLastName());
+            preparedStatement.setFloat(3, employeeData.getSalary());
+            preparedStatement.setString(4, employeeData.getVacationEnd());
+            preparedStatement.setBinaryStream(5, null);
+            if (employeeData.getPhoto() != null) {
+                preparedStatement.setBinaryStream(5, employeeData.getPhoto());
             }
             preparedStatement.executeUpdate();
             preparedStatement.close();
@@ -122,14 +123,5 @@ public class EmployeeDAO {
         }
     }
 
-    /*
-    public static void updateEmployee(Employee newEmployeeData,int idToUpdate){
-        String query = "UPDATE employee SET first_name = '"+newEmployeeData.getFirstName()+"', last_name= '"+newEmployeeData.getLastName()
-                +"', salary = '"+newEmployeeData.getSalary()+"' , vacation_end = '"+newEmployeeData.getVacationEnd()
-                +"' WHERE id = "+idToUpdate+";";
-        executeUpdate(query);
-    }
-
-     */
 }
 

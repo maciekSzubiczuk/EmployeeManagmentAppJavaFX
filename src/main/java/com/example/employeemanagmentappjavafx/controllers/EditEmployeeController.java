@@ -1,10 +1,11 @@
 package com.example.employeemanagmentappjavafx.controllers;
 
-import com.example.employeemanagmentappjavafx.utils.DataManager;
 import com.example.employeemanagmentappjavafx.View;
 import com.example.employeemanagmentappjavafx.ViewSwitcher;
 import com.example.employeemanagmentappjavafx.database.DatabaseConnector;
 import com.example.employeemanagmentappjavafx.models.Employee;
+import com.example.employeemanagmentappjavafx.utils.DataManager;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -14,61 +15,52 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executor;
 
-import static com.example.employeemanagmentappjavafx.dao.EmployeeDAO.deleteEmployee;
-import static com.example.employeemanagmentappjavafx.dao.EmployeeDAO.updateEmployee;
+import static com.example.employeemanagmentappjavafx.dao.EmployeeDAO.*;
 import static com.example.employeemanagmentappjavafx.utils.FileUtil.inputStreamToImage;
+import static com.example.employeemanagmentappjavafx.utils.ThreadHelper.createExecutor;
 
 public class EditEmployeeController implements Initializable {
 
     @FXML
     private TextField tfFirstName;
-
     @FXML
     private TextField tfLastName;
-
     @FXML
     private TextField tfSalary;
-
     @FXML
     private TextField tfVacation;
-
     @FXML
     ImageView ivEmployeePhoto;
-
     @FXML
     private Button btnEditEmployee;
-
     @FXML
     private Button cancelBtn;
-
     @FXML
     private Button btnChangePhoto;
-
     @FXML
     private Button btnDeleteEmployee;
 
-    private DatabaseConnector databaseConnector = new DatabaseConnector();
-    private FileChooser fileChooser;
+
     private File file = null;
-    private Desktop desktop = Desktop.getDesktop();
-    private Image image;
-    private FileInputStream fileInputStream;
+    private final Desktop desktop = Desktop.getDesktop();
+    private Executor exec;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            showEmployee();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        exec = createExecutor();
+        showEmployee();
     }
 
-    public void showEmployee() throws IOException {
+    public void showEmployee() {
         Employee employee = DataManager.getInstance().getSelectedEmployee();
         tfFirstName.setText(employee.getFirstName());
         tfLastName.setText(employee.getLastName());
@@ -76,7 +68,11 @@ public class EditEmployeeController implements Initializable {
         tfVacation.setText(String.valueOf(employee.getVacationEnd()));
 
         if (employee.getPhoto() != null) {
-            ivEmployeePhoto.setImage(inputStreamToImage(employee.getPhoto()));
+            try {
+                ivEmployeePhoto.setImage(inputStreamToImage(employee.getPhoto()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -92,13 +88,28 @@ public class EditEmployeeController implements Initializable {
                 e.printStackTrace();
             }
         }
-        updateEmployee(newEmployeeData);
-        ViewSwitcher.switchTo(View.LIST_EMPLOYEES);
+        Task<Void> updateTask = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                updateEmployee(newEmployeeData);
+                return null;
+            }
+        };
+
+        updateTask.setOnFailed(e -> {
+            updateTask.getException().printStackTrace();
+        });
+
+        updateTask.setOnSucceeded(e -> {
+            ViewSwitcher.switchTo(View.LIST_EMPLOYEES);
+        });
+
+        exec.execute(updateTask);
     }
 
     @FXML
     protected void onBtnChangePhoto() {
-        fileChooser = new FileChooser();
+        FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg")
         );
@@ -106,7 +117,7 @@ public class EditEmployeeController implements Initializable {
         if (file != null) {
             try {
                 desktop.open(file);
-                image = new Image(file.toURI().toString());
+                Image image = new Image(file.toURI().toString());
                 ivEmployeePhoto.setImage(image);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -121,7 +132,22 @@ public class EditEmployeeController implements Initializable {
 
     @FXML
     protected void onBtnDeleteEmployee() {
-        deleteEmployee(DataManager.getInstance().getSelectedEmployee().getId());
-        ViewSwitcher.switchTo(View.LIST_EMPLOYEES);
+        Task<Void> deleteTask = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                deleteEmployee(DataManager.getInstance().getSelectedEmployee().getId());
+                return null;
+            }
+        };
+
+        deleteTask.setOnFailed(e -> {
+            deleteTask.getException().printStackTrace();
+        });
+
+        deleteTask.setOnSucceeded(e -> {
+            ViewSwitcher.switchTo(View.LIST_EMPLOYEES);
+        });
+
+        exec.execute(deleteTask);
     }
 }

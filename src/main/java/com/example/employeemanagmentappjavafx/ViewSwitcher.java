@@ -9,15 +9,16 @@ import java.util.Objects;
 public class ViewSwitcher {
 
     private static Scene scene;
+
     public static void setScene(Scene scene) {
         ViewSwitcher.scene = scene;
     }
 
-    public static void switchTo(View view)  {
-        try{
+    public static void switchTo(View view) {
+        try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(ViewSwitcher.class.getResource(view.getFileName())));
             scene.setRoot(root);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -9,7 +9,7 @@ public enum View {
 
     private String fileName;
 
-    View(String fileName){
+    View(String fileName) {
         this.fileName = fileName;
     }
 

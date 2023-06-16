@@ -25,6 +25,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import static com.example.employeemanagmentappjavafx.dao.EmployeeDAO.getEmployee;
+import static com.example.employeemanagmentappjavafx.utils.ThreadHelper.createExecutor;
 
 
 public class ListEmployeesController implements Initializable {
@@ -55,9 +56,9 @@ public class ListEmployeesController implements Initializable {
 
     private static final Logger logger = LogManager.getLogger(ListEmployeesController.class);
 
-    private DatabaseConnector databaseConnector = new DatabaseConnector();
+    private final DatabaseConnector databaseConnector = new DatabaseConnector();
 
-    private EmployeeDAO employeeDAO = new EmployeeDAO(databaseConnector);
+    private final EmployeeDAO employeeDAO = new EmployeeDAO(databaseConnector);
 
     private Executor exec;
 
@@ -66,20 +67,17 @@ public class ListEmployeesController implements Initializable {
         tvEmployees.setRowFactory(tv -> {
             TableRow<Employee> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
-                if (! row.isEmpty() && event.getButton()==MouseButton.PRIMARY
+                if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY
                         && event.getClickCount() == 2) {
                     Employee clickedEmployee = row.getItem();
                     DataManager.getInstance().setSelectedEmployee(getEmployee(clickedEmployee.getId()));
                     ViewSwitcher.switchTo(View.EDIT_EMPLOYEE);
                 }
             });
-            return row ;
+            return row;
         });
-        exec = Executors.newCachedThreadPool(runnable -> {
-            Thread t = new Thread(runnable);
-            t.setDaemon(true);
-            return t ;
-        });
+        exec = createExecutor();
+        ;
         showEmployees();
     }
 
@@ -90,8 +88,8 @@ public class ListEmployeesController implements Initializable {
         Task<ObservableList<Employee>> employeeListTask = new Task<ObservableList<Employee>>() {
             @Override
             public ObservableList<Employee> call() throws Exception {
-                logger.info("running thread: "+Thread.currentThread().getName());
-                //Thread.sleep(5000);
+                logger.info("running thread: " + Thread.currentThread().getName());
+                Thread.sleep(2000);
                 return employeeDAO.getEmployeeList();
             }
         };
@@ -116,7 +114,7 @@ public class ListEmployeesController implements Initializable {
     }
 
     @FXML
-    protected void onBtnAddNewEmployee(){
+    protected void onBtnAddNewEmployee() {
         ViewSwitcher.switchTo(View.CREATE_EMPLOYEE);
     }
 

@@ -1,6 +1,5 @@
 package com.example.employeemanagmentappjavafx.models;
 
-import java.io.File;
 import java.io.InputStream;
 
 public class Employee {

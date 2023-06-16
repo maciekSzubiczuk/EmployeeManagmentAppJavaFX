@@ -8,7 +8,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="340.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.employeemanagmentappjavafx.controllers.ListEmployeesController">
    <children>
-      <TableView fx:id="tvEmployees" layoutX="14.0" layoutY="14.0" prefHeight="295.0" prefWidth="443.0">
+      <TableView fx:id="tvEmployees" layoutX="14.0" layoutY="14.0" prefHeight="321.0" prefWidth="451.0">
         <columns>
           <TableColumn fx:id="colId" prefWidth="41.999999046325684" text="ID" />
           <TableColumn fx:id="colFirstName" prefWidth="88.00000381469727" text="Imię" />
