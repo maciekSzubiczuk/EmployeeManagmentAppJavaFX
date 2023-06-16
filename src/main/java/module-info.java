@@ -23,4 +23,6 @@ module com.example.employeemanagmentappjavafx {
     opens com.example.employeemanagmentappjavafx.dao to javafx.fxml;
     exports com.example.employeemanagmentappjavafx.models;
     opens com.example.employeemanagmentappjavafx.models to javafx.fxml;
+    exports com.example.employeemanagmentappjavafx.utils;
+    opens com.example.employeemanagmentappjavafx.utils to javafx.fxml;
 }

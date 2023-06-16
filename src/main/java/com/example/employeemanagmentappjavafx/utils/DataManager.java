@@ -1,4 +1,4 @@
-package com.example.employeemanagmentappjavafx;
+package com.example.employeemanagmentappjavafx.utils;
 
 import com.example.employeemanagmentappjavafx.models.Employee;
 

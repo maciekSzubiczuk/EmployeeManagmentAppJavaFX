@@ -1,6 +1,6 @@
 package com.example.employeemanagmentappjavafx.controllers;
 
-import com.example.employeemanagmentappjavafx.DataManager;
+import com.example.employeemanagmentappjavafx.utils.DataManager;
 import com.example.employeemanagmentappjavafx.View;
 import com.example.employeemanagmentappjavafx.ViewSwitcher;
 import com.example.employeemanagmentappjavafx.database.DatabaseConnector;
@@ -20,6 +20,7 @@ import java.util.ResourceBundle;
 
 import static com.example.employeemanagmentappjavafx.dao.EmployeeDAO.deleteEmployee;
 import static com.example.employeemanagmentappjavafx.dao.EmployeeDAO.updateEmployee;
+import static com.example.employeemanagmentappjavafx.utils.FileUtil.inputStreamToImage;
 
 public class EditEmployeeController implements Initializable {
 
@@ -75,26 +76,7 @@ public class EditEmployeeController implements Initializable {
         tfVacation.setText(String.valueOf(employee.getVacationEnd()));
 
         if (employee.getPhoto() != null) {
-
-            // displaying the Image
-            InputStream is = employee.getPhoto();
-            OutputStream os = null;
-            try {
-                os = new FileOutputStream(new File("photo.jpg"));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            byte[] content = new byte[1024];
-            int size = 0;
-            while ((size = is.read(content)) != -1) {
-                assert os != null;
-                os.write(content, 0, size);
-            }
-            assert os != null;
-            os.close();
-            is.close();
-            Image image = new Image("file:photo.jpg");
-            ivEmployeePhoto.setImage(image);
+            ivEmployeePhoto.setImage(inputStreamToImage(employee.getPhoto()));
         }
     }
 

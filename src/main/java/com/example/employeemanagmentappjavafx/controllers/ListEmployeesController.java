@@ -1,6 +1,6 @@
 package com.example.employeemanagmentappjavafx.controllers;
 
-import com.example.employeemanagmentappjavafx.DataManager;
+import com.example.employeemanagmentappjavafx.utils.DataManager;
 import com.example.employeemanagmentappjavafx.View;
 import com.example.employeemanagmentappjavafx.ViewSwitcher;
 import com.example.employeemanagmentappjavafx.database.DatabaseConnector;
@@ -9,28 +9,19 @@ import com.example.employeemanagmentappjavafx.dao.EmployeeDAO;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-import java.io.IOException;
 import java.net.URL;
 
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static com.example.employeemanagmentappjavafx.dao.EmployeeDAO.getEmployee;
